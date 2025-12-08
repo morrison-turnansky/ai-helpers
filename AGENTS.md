@@ -63,7 +63,7 @@ Categories are defined in `categories.json` at the repository root and automatic
 
 - **Claude Code plugins**: Categorized by plugin directory name
 - **Cursor commands**: Categorized by command filename (without .md extension)
-- **Gemini Gems**: Categorized using YAML metadata in gems.yaml
+- **Gemini Gems**: Categorized by gem title in categories.json
 
 ### Current Categories
 

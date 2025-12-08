@@ -278,7 +278,7 @@ def get_cursor_commands(cursor_path: Path) -> List[Dict[str, str]]:
     return commands
 
 
-def get_gemini_gems(gems_dir: Path) -> List[Dict[str, any]]:
+def get_gemini_gems(gems_dir: Path, categories_data: Dict) -> List[Dict[str, any]]:
     """Get all Gemini Gems as individual tools for website display"""
     tools = []
     gems_file = gems_dir / "gems.yaml"
@@ -295,8 +295,8 @@ def get_gemini_gems(gems_dir: Path) -> List[Dict[str, any]]:
 
         for gem in gems_data["gems"]:
             gem_title = gem.get("title", "Untitled Gem")
-            # Get category from gem data, default to "general" if not specified
-            gem_category = gem.get("category", "general")
+            # Get category from categories.json based on gem title
+            gem_category = get_gemini_gem_category(gem_title, categories_data)
 
             tools.append(
                 {
@@ -339,16 +339,18 @@ def load_categories(base_path: Path) -> Dict:
 def update_categories_with_missing_items(
     categories_data: Dict, marketplace_data: Dict, base_path: Path
 ) -> bool:
-    """Update categories.json to include any missing plugins or cursor commands in 'general' category.
+    """Update categories.json to include any missing plugins, cursor commands, or gemini gems in 'general' category.
     Returns True if file was updated, False otherwise."""
 
     # Get all existing categorized items
     categorized_plugins = set()
     categorized_commands = set()
+    categorized_gems = set()
 
     for category_data in categories_data["categories"].values():
         categorized_plugins.update(category_data.get("claude_plugin_dirs", []))
         categorized_commands.update(category_data.get("cursor_commands", []))
+        categorized_gems.update(category_data.get("gemini_gems", []))
 
     # Get all actual plugins from marketplace
     actual_plugins = {plugin["name"] for plugin in marketplace_data["plugins"]}
@@ -360,12 +362,26 @@ def update_categories_with_missing_items(
         for cmd_file in cursor_path.glob("*.md"):
             actual_commands.add(cmd_file.stem)
 
+    # Get all actual gemini gems
+    actual_gems = set()
+    gems_file = base_path / "gemini-gems" / "gems.yaml"
+    if gems_file.exists():
+        try:
+            with open(gems_file, "r") as f:
+                gems_data = yaml.safe_load(f)
+            if gems_data and "gems" in gems_data:
+                for gem in gems_data["gems"]:
+                    actual_gems.add(gem.get("title", "Untitled Gem"))
+        except Exception as e:
+            print(f"Error reading gems.yaml: {e}")
+
     # Find missing items
     missing_plugins = actual_plugins - categorized_plugins
     missing_commands = actual_commands - categorized_commands
+    missing_gems = actual_gems - categorized_gems
 
     # If nothing missing, no update needed
-    if not missing_plugins and not missing_commands:
+    if not missing_plugins and not missing_commands and not missing_gems:
         return False
 
     # Ensure general category exists with proper structure
@@ -375,6 +391,7 @@ def update_categories_with_missing_items(
             "description": "General-purpose tools and utilities",
             "claude_plugin_dirs": [],
             "cursor_commands": [],
+            "gemini_gems": [],
         }
 
     general_category = categories_data["categories"]["general"]
@@ -384,6 +401,8 @@ def update_categories_with_missing_items(
         general_category["claude_plugin_dirs"] = []
     if "cursor_commands" not in general_category:
         general_category["cursor_commands"] = []
+    if "gemini_gems" not in general_category:
+        general_category["gemini_gems"] = []
 
     # Add missing plugins and commands to general category
     if missing_plugins:
@@ -404,6 +423,15 @@ def update_categories_with_missing_items(
             f"Added {len(missing_commands)} missing Cursor commands to general category: {', '.join(sorted(missing_commands))}"
         )
 
+    if missing_gems:
+        general_category["gemini_gems"].extend(sorted(missing_gems))
+        general_category["gemini_gems"] = sorted(
+            list(set(general_category["gemini_gems"]))
+        )
+        print(
+            f"Added {len(missing_gems)} missing Gemini Gems to general category: {', '.join(sorted(missing_gems))}"
+        )
+
     return True
 
 
@@ -420,6 +448,15 @@ def get_cursor_category(command_name: str, categories_data: Dict) -> str:
     for category_key, category_data in categories_data["categories"].items():
         cursor_commands = category_data.get("cursor_commands", [])
         if command_name in cursor_commands:
+            return category_key
+    return "general"  # Default category
+
+
+def get_gemini_gem_category(gem_title: str, categories_data: Dict) -> str:
+    """Determine the category for a Gemini Gem based on configuration"""
+    for category_key, category_data in categories_data["categories"].items():
+        gemini_gems = category_data.get("gemini_gems", [])
+        if gem_title in gemini_gems:
             return category_key
     return "general"  # Default category
 
@@ -513,7 +550,7 @@ def build_website_data():
     # Process Gemini Gems
     gemini_gems_path = base_path / "gemini-gems"
     if gemini_gems_path.exists():
-        gems = get_gemini_gems(gemini_gems_path)
+        gems = get_gemini_gems(gemini_gems_path, categories_data)
 
         # Add each gem as an individual tool
         for gem_tool in gems:

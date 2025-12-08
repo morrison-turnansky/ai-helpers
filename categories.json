@@ -17,6 +17,10 @@
         "konflux-application",
         "konflux-component",
         "rpm-examine"
+      ],
+      "gemini_gems": [
+        "Email Copilot",
+        "Technical Spike & Investigation"
       ]
     },
     "aipcc": {
@@ -27,6 +31,10 @@
       ],
       "cursor_commands": [
         "aipcc-commit-suggest"
+      ],
+      "gemini_gems": [
+        "Commit Message Assistant",
+        "AIPCC ADR Assistant"
       ]
     }
   }
