@@ -6,7 +6,7 @@ Automated weekly summaries of vLLM CI SIG Slack activity for the Red Hat AI Infe
 
 ```bash
 # Run from project root
-.claude/skills/vllm-weekly-summary/scripts/generate_transcript.py
+./scripts/generate_transcript.py
 ```
 
 ## What This Does
@@ -37,13 +37,13 @@ vllm-weekly-summary/
 
 ```bash
 # Default (last 7 days)
-.claude/skills/vllm-weekly-summary/scripts/generate_transcript.py
+./scripts/generate_transcript.py
 
 # Custom time range
-.claude/skills/vllm-weekly-summary/scripts/generate_transcript.py --days 14
+./scripts/generate_transcript.py --days 14
 
 # Different output directory
-.claude/skills/vllm-weekly-summary/scripts/generate_transcript.py --output-dir my_summary
+./scripts/generate_transcript.py --output-dir my_summary
 ```
 
 ## Output
@@ -56,7 +56,7 @@ Creates `vllm_weekly_summary/` directory with:
 
 1. **Generate Transcript**
    ```bash
-   .claude/skills/vllm-weekly-summary/scripts/generate_transcript.py
+   ./scripts/generate_transcript.py
    ```
 
 2. **Analyze with Claude**

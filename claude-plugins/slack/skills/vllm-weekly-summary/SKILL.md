@@ -27,7 +27,7 @@ This skill automates the process of generating comprehensive weekly summaries of
 
 The skill performs three main steps:
 1. **Export**: Uses `slackdump` CLI to export the last week's messages from the vLLM CI Slack channel
-2. **Convert**: Transforms the Slack export into a clean markdown transcript using `slack_to_transcript.py`
+2. **Convert**: Transforms the Slack export into a clean markdown transcript using `generate_transcript.py`
 3. **Present**: Outputs the transcript for analysis and summarization
 
 ## What It Does
@@ -44,8 +44,6 @@ The skill performs three main steps:
 - **slackdump** - Must be installed and authenticated with vLLM workspace
   - Installation: See https://github.com/rusq/slackdump
   - Authentication: Run `slackdump workspace add` first
-- **slack_to_transcript.py** - Must exist in project root
-  - Location: `/Users/whardy/Developer/jira-agent/slack_to_transcript.py`
 
 ### Environment Setup
 The slackdump tool must be configured with access to the vLLM Slack workspace before using this skill.
@@ -162,12 +160,6 @@ The `--output-dir` parameter specifies where to save the export and transcript
 Ensure slackdump is installed and in your PATH:
 ```bash
 which slackdump
-```
-
-### "slack_to_transcript.py not found"
-Verify the script exists at the project root:
-```bash
-ls -la /Users/whardy/Developer/jira-agent/slack_to_transcript.py
 ```
 
 ### "Authentication failed"
