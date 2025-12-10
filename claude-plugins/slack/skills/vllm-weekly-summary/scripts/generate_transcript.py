@@ -461,8 +461,12 @@ def main():
     print(f"📁 Slack export: {export_dir}")
 
     # Read the transcript
-    with open(transcript_file, 'r') as f:
-        transcript_content = f.read()
+    try:
+        with open(transcript_file, 'r', encoding='utf-8') as f:
+            transcript_content = f.read()
+    except (OSError, UnicodeDecodeError) as e:
+        print(f"❌ Error: Failed to read transcript file '{transcript_file}': {e}")
+        sys.exit(1)
 
     # Output structured data for Claude Code to process
     print("\n" + "=" * 60)
