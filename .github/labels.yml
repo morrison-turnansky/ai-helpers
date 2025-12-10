@@ -1,0 +1,130 @@
+# AI Helpers Marketplace Labels
+# This file defines labels used for issue and PR management
+
+# Bug tracking
+- name: bug
+  description: Something isn't working
+  color: d73a4a
+
+# Enhancement and feature requests
+- name: enhancement
+  description: New feature or request
+  color: a2eeef
+
+# Platform-specific labels
+- name: claude-code
+  description: Related to Claude Code plugins, commands, skills, or agents
+  color: 7057ff
+
+- name: cursor-ai
+  description: Related to Cursor AI commands
+  color: 0969da
+
+- name: gemini
+  description: Related to Gemini Gems
+  color: fbca04
+
+# Documentation
+- name: documentation
+  description: Improvements or additions to documentation
+  color: 0075ca
+
+# Organization and structure
+- name: category
+  description: Related to tool categorization and organization
+  color: d4c5f9
+
+# Development workflow
+- name: tooling
+  description: Changes to build tools, CI/CD, or development workflow
+  color: 5319e7
+
+# Priority labels
+- name: priority-high
+  description: High priority issue or PR
+  color: b60205
+
+- name: priority-medium
+  description: Medium priority issue or PR
+  color: fbca04
+
+- name: priority-low
+  description: Low priority issue or PR
+  color: 0e8a16
+
+# Status labels
+- name: good first issue
+  description: Good for newcomers
+  color: 7057ff
+
+- name: help wanted
+  description: Extra attention is needed
+  color: 008672
+
+- name: needs-review
+  description: Requires review from maintainers
+  color: ededed
+
+- name: work-in-progress
+  description: Still being worked on
+  color: yellow
+
+# Type of contribution
+- name: new-plugin
+  description: Contribution adds a new plugin
+  color: 1d76db
+
+- name: new-command
+  description: Contribution adds a new command
+  color: 0e8a16
+
+- name: new-skill
+  description: Contribution adds a new skill
+  color: 006b75
+
+- name: new-agent
+  description: Contribution adds a new agent
+  color: 5319e7
+
+- name: breaking-change
+  description: Introduces breaking changes
+  color: d93f0b
+
+# Quality assurance
+- name: needs-testing
+  description: Requires testing before merge
+  color: f9c513
+
+- name: validated
+  description: Has been tested and validated
+  color: 0e8a16
+
+# Special cases
+- name: duplicate
+  description: This issue or pull request already exists
+  color: cfd3d7
+
+- name: invalid
+  description: This doesn't seem right
+  color: e4e669
+
+- name: wontfix
+  description: This will not be worked on
+  color: ffffff
+
+- name: question
+  description: Further information is requested
+  color: d876e3
+
+# Marketplace specific
+- name: marketplace
+  description: Related to marketplace functionality or website
+  color: 006b75
+
+- name: ethical-review
+  description: Requires review for ethical guidelines compliance
+  color: d93f0b
+
+- name: idea
+  description: Community idea or suggestion for new tools
+  color: f29e4c

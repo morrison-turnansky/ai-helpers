@@ -14,7 +14,7 @@ This repository is a collaborative place hosting collections of AI plugins to au
 Have an idea for a new plugin, command, or assistant but not sure how to implement it? We'd love to hear about it! Simply file a GitHub issue with your idea in the title and we'll work together to make it happen.
 
 > [!TIP]
-> [Share your idea](https://github.com/opendatahub-io/ai-helpers/issues/new?type=Feature&labels=%22help%20wanted%22)
+> [Share your idea](https://github.com/opendatahub-io/ai-helpers/issues/new?assignees=&labels=enhancement%2Chelp+wanted%2Cidea&template=07_idea_request.md&title=%5BIdea%5D+)
 
 No implementation details needed - just describe what you'd like to automate or what workflow you think could be improved. The community can help figure out the best way to build it.
 
