@@ -1,14 +1,6 @@
 ---
 name: vLLM Weekly Summary
 description: Generate weekly summaries of vLLM CI SIG Slack channel activity for the RHAIIS midstream release team
-version: 1.0.0
-tags:
-  - vllm
-  - slack
-  - ci
-  - summary
-when_to_use: |
-  Use this skill when the user asks for a weekly summary of vLLM CI channel activity.
 ---
 
 # vLLM Weekly Summary Skill
