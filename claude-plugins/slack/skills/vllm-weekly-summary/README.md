@@ -5,7 +5,7 @@ Automated weekly summaries of vLLM CI SIG Slack activity for the Red Hat AI Infe
 ## Quick Start
 
 ```bash
-# Run from project root
+# Run from the skill directory
 ./scripts/generate_transcript.py
 ```
 
@@ -18,7 +18,6 @@ Automated weekly summaries of vLLM CI SIG Slack activity for the Red Hat AI Infe
 ## Requirements
 
 - `slackdump` CLI tool (authenticated with vLLM workspace)
-- `slack_to_transcript.py` in project root
 - Python 3.12+
 
 ## Files
@@ -36,11 +35,14 @@ vllm-weekly-summary/
 ## Usage Examples
 
 ```bash
-# Default (last 7 days)
+# Default (last 7 days, default channel)
 ./scripts/generate_transcript.py
 
 # Custom time range
 ./scripts/generate_transcript.py --days 14
+
+# Specify a different channel ID
+./scripts/generate_transcript.py --channel C12345ABCDE
 
 # Different output directory
 ./scripts/generate_transcript.py --output-dir my_summary
@@ -72,7 +74,6 @@ Creates `vllm_weekly_summary/` directory with:
 ## Integration
 
 This skill works alongside:
-- **slack_to_transcript.py** - Converts Slack exports to markdown
 - **slackdump** - CLI tool for exporting Slack data
 - **Claude Code** - For AI-powered summarization
 
