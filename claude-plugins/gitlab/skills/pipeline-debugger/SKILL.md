@@ -26,20 +26,22 @@ for setting up the required configuration.
 
 ## Instructions
 
+**IMPORTANT**: Always run the script from the user's current working directory (where Claude was launched), NOT from the skill directory. The script needs access to the git repository context. Use `$SKILL_DIR/scripts/check_mr_pipeline.py` to reference the script with an absolute path.
+
 When the user asks to check CI status, debug pipeline failures, or view job logs:
 
 1. **Check Current Pipeline Status**
-    - Use the `./scripts/check_mr_pipeline.py` script without arguments to check the current branch's MR pipeline status
+    - Run `$SKILL_DIR/scripts/check_mr_pipeline.py` without arguments to check the current branch's MR pipeline status
     - The script will display all jobs grouped by stage with status indicators
 
 2. **Check Specific Branch**
     - If the user asks to check on the pipeline status for a different branch than the current one, use the `-b` or
       `--branch` option to specify that branch.
-        - Example: `./scripts/check_mr_pipeline.py -b feature-branch`
+        - Example: `$SKILL_DIR/scripts/check_mr_pipeline.py -b feature-branch`
 
 3. **View Job Logs**
     - Use the `-j` or `--job` option to retrieve and display logs for a specific job
-    - Example: `./scripts/check_mr_pipeline.py -j "test-job-name"`
+    - Example: `$SKILL_DIR/scripts/check_mr_pipeline.py -j "test-job-name"`
     - The script will show the job's metadata and full log output
 
 4. **Troubleshoot CI Failures**
