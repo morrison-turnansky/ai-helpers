@@ -1,0 +1,34 @@
+{
+	"name": "MVP Container for dev container workflow",
+	"build": {
+		"context": "..",
+		"dockerfile": "../images/claude/Containerfile"
+	},
+	// "postCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+	"mounts": [
+		"type=bind,source=${localEnv:HOME}/.gitconfig,target=/home/claude/.gitconfig,readonly",
+		"type=bind,source=${localEnv:HOME}/.config/gcloud,target=/home/claude/.config/gcloud"
+		// "type=bind,source=/usr/bin/gcloud,target=/usr/bin/gcloud,readonly"
+	],
+	"containerEnv": {
+		"CLAUDE_CODE_USE_VERTEX": "1",
+		"CLOUD_ML_REGION": "us-east5",
+		"ANTHROPIC_VERTEX_PROJECT_ID": "itpc-gcp-ai-eng-claude",
+		"DISABLE_AUTOUPDATER": "1",
+		"GOOGLE_APPLICATION_CREDENTIALS": "/home/claude/.config/gcloud/application_default_credentials.json",
+		"CLAUDE_PROJECT_DIR": "${containerWorkspaceFolder}"
+	},
+	"remoteUser": "claude",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"anthropic.claude-code"
+			],
+			"settings": {
+				"claudeCode.disableLoginPrompt": true,
+				"claudeCode.vertexProjectId": "itpc-gcp-ai-eng-claude",
+				"claudeCode.vertexRegion": "us-east5"
+			}
+		}
+	}
+}
