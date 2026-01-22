@@ -3,7 +3,7 @@
   "skills": {
     "vllm-slack-summary": {
       "type": "domain",
-      "enforcement": "suggest",
+      "enforcement": "block",
       "priority": "high",
       "promptTriggers": {
         "keywords": [

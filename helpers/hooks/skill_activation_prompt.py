@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+
 """
 Skill activation hook for Claude Code.
 Analyzes user prompts and suggests relevant skills based on trigger patterns.
 """
 
-import sys
 import json
+import os
 import re
+import sys
 from pathlib import Path
 
 
@@ -222,9 +224,6 @@ def main():
         except json.JSONDecodeError:
             # Some hook runners provide raw prompt text instead of JSON
             prompt = input_data
-
-        # Determine rules path based on environment
-        import os
 
         plugin_root = os.environ.get("CLAUDE_PLUGIN_ROOT", "")
         if plugin_root:
