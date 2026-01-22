@@ -122,12 +122,24 @@ class SkillActivationChecker:
         output.append("")
 
         # Group by priority
+        known_priorities = {"critical", "high", "medium", "low"}
         critical = [
             s for s in matched_skills if s["config"].get("priority") == "critical"
         ]
         high = [s for s in matched_skills if s["config"].get("priority") == "high"]
         medium = [s for s in matched_skills if s["config"].get("priority") == "medium"]
         low = [s for s in matched_skills if s["config"].get("priority") == "low"]
+
+        # Warn about skills with invalid priority
+        for skill in matched_skills:
+            priority = skill["config"].get("priority")
+            if priority not in known_priorities:
+                print(
+                    f"Warning: Skill '{skill['name']}' has invalid priority '{priority}'. "
+                    f"Valid priorities are: {', '.join(sorted(known_priorities))}. "
+                    f"Skipping this skill.",
+                    file=sys.stderr,
+                )
 
         if critical:
             output.append("⚠️  CRITICAL SKILLS (REQUIRED):")
@@ -182,11 +194,15 @@ class SkillActivationChecker:
 def main():
     """Main entry point for the skill activation hook.
 
-    Reads JSON input from stdin containing user prompt, checks for skill matches,
+    Reads input from stdin (JSON or plain text), checks for skill matches,
     and outputs formatted suggestions if any skills are triggered.
 
     Stdin Input:
-        JSON object with 'prompt' field containing user's message.
+        JSON object with 'prompt' or 'text' field, or plain text prompt.
+        Examples:
+        - {"prompt": "user message"}
+        - {"text": "user message"}
+        - "plain text user message"
 
     Environment Variables:
         CLAUDE_PLUGIN_ROOT: Path to plugin directory (for plugin-based hooks).
@@ -194,13 +210,18 @@ def main():
 
     Exits:
         0: Success (with or without matches)
-        1: Error (invalid JSON, missing rules file, etc.)
+        1: Error (missing rules file, etc.)
     """
     try:
         # Read input from stdin
         input_data = sys.stdin.read()
-        data = json.loads(input_data)
-        prompt = data.get("prompt", "")
+        prompt = ""
+        try:
+            data = json.loads(input_data) if input_data.strip() else {}
+            prompt = data.get("prompt", "") or data.get("text", "") or ""
+        except json.JSONDecodeError:
+            # Some hook runners provide raw prompt text instead of JSON
+            prompt = input_data
 
         # Determine rules path based on environment
         import os
@@ -211,10 +232,12 @@ def main():
             rules_path = Path(plugin_root) / "hooks" / "skill-rules.json"
         else:
             # Fallback to project directory (for local development)
-            project_dir = os.environ.get(
-                "CLAUDE_PROJECT_DIR", os.path.expanduser("~/project")
+            # Infer project root from script location: helpers/hooks/script.py -> repo root
+            default_project_dir = Path(__file__).resolve().parents[2]
+            project_dir = Path(
+                os.environ.get("CLAUDE_PROJECT_DIR", str(default_project_dir))
             )
-            rules_path = Path(project_dir) / ".claude" / "skills" / "skill-rules.json"
+            rules_path = project_dir / ".claude" / "skills" / "skill-rules.json"
 
         # Check for skill matches
         checker = SkillActivationChecker(rules_path)
@@ -225,9 +248,6 @@ def main():
 
         sys.exit(0)
 
-    except json.JSONDecodeError as e:
-        print(f"Error parsing input JSON: {e}", file=sys.stderr)
-        sys.exit(1)
     except Exception as e:
         print(f"Error in skill_activation_prompt hook: {e}", file=sys.stderr)
         sys.exit(1)
